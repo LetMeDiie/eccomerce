@@ -1,0 +1,17 @@
+services:
+  postgres-db:
+    image: postgres:15
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_USER: amihady
+      POSTGRES_PASSWORD: amihady
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - product_db_data:/var/lib/postgresql/data
+
+
+volumes:
+  product_db_data:
