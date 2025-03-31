@@ -1,0 +1,66 @@
+spring:
+  application:
+    name: product-service
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    consumer:
+      group-id: productId
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.type.mapping: >
+          imageAddedEvent:kz.amihady.eccomerce.kafka.image.event.ImageAddedEvent,
+          imageDeletedEvent:kz.amihady.eccomerce.kafka.image.event.ImageDeletedEvent
+        spring.json.trusted.packages: kz.amihady.eccomerce.kafka.image.event
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: >
+          productCreatedEvent:kz.amihady.eccomerce.kafka.product.event.ProductCreatedEvent,
+          productDeletedEvent:kz.amihady.eccomerce.kafka.product.event.ProductDeletedEvent
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/product_db
+    username: amihady
+    password: amihady
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+  cache:
+    type: redis
+  redis:
+    host: localhost
+    port: 6379
+
+
+
+
+
+logging:
+  level:
+    org.apache.kafka: ERROR
+    org.springframework.kafka: ERROR
+
+server:
+  port: 8080
+
+
+kafka:
+  topics:
+    image-added: "image-added"
+    image-deleted: "image-deleted"
+    product-created: "product-created"
+    product-deleted: "product-deleted"
+
+
