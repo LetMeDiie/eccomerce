@@ -1,9 +1,9 @@
-package kz.amihady.eccomerce.kafka.product;
+package kz.amihady.eccomerce.kafka;
 
 
 import kz.amihady.eccomerce.kafka.config.KafkaTopicsProperties;
-import kz.amihady.eccomerce.kafka.product.event.ProductCreatedEvent;
-import kz.amihady.eccomerce.kafka.product.event.ProductDeletedEvent;
+import kz.amihady.eccomerce.kafka.product.ProductCreatedEvent;
+import kz.amihady.eccomerce.kafka.product.ProductDeletedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;

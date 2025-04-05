@@ -41,8 +41,8 @@ class ProductQueryServiceImplTest {
     @BeforeEach
     void setUp() {
         productId = UUID.randomUUID();
-        product = new Product(productId, "Guitar", "Acoustic guitar", new BigDecimal("100.00"), new ArrayList<>());
-        productResponse = new ProductResponse("Guitar", "Acoustic guitar", new BigDecimal("100.00"), new ArrayList<>());
+        product = new Product(productId, "Guitar", "Acoustic guitar", new BigDecimal("100.00"),10L, new ArrayList<>());
+        productResponse = new ProductResponse("Guitar", "Acoustic guitar", new BigDecimal("100.00"),10L, new ArrayList<>());
     }
 
     @Test

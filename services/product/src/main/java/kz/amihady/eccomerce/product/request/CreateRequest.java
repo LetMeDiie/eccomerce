@@ -19,6 +19,6 @@ public record CreateRequest(
 
         @NotNull(message = "Количество не может быть пустым")
         @Min(value = 1, message = "Количество должно быть хотя бы 1")
-        Integer quantity
+        Long quantity
 ) {
 }

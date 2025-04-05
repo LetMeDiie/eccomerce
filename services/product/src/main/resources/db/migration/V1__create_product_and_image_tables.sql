@@ -4,7 +4,8 @@ CREATE TABLE product (
     id UUID PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
-    price DECIMAL(19, 2) NOT NULL
+    price DECIMAL(19, 2) NOT NULL,
+    in_stock BIGINT NOT NULL
 );
 
 CREATE TABLE image (

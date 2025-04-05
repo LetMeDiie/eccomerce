@@ -14,4 +14,6 @@ public class KafkaTopicsProperties {
     private String imageDeleted;
     private String productCreated;
     private String productDeleted;
+    private String inventoryUpdated;
+
 }

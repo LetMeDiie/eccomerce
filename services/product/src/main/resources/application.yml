@@ -11,17 +11,18 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.type.mapping: >
-          imageAddedEvent:kz.amihady.eccomerce.kafka.image.event.ImageAddedEvent,
-          imageDeletedEvent:kz.amihady.eccomerce.kafka.image.event.ImageDeletedEvent
-        spring.json.trusted.packages: kz.amihady.eccomerce.kafka.image.event
+          imageAddedEvent:kz.amihady.eccomerce.kafka.image.ImageAddedEvent,
+          imageDeletedEvent:kz.amihady.eccomerce.kafka.image.ImageDeletedEvent,
+          inventoryUpdatedEvent:kz.amihady.eccomerce.kafka.inventory.InventoryUpdatedEvent
+        spring.json.trusted.packages: kz.amihady.eccomerce.kafka.image,kz.amihady.eccomerce.kafka.inventory
 
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
         spring.json.type.mapping: >
-          productCreatedEvent:kz.amihady.eccomerce.kafka.product.event.ProductCreatedEvent,
-          productDeletedEvent:kz.amihady.eccomerce.kafka.product.event.ProductDeletedEvent
+          productCreatedEvent:kz.amihady.eccomerce.kafka.product.ProductCreatedEvent,
+          productDeletedEvent:kz.amihady.eccomerce.kafka.product.ProductDeletedEvent
 
   datasource:
     url: jdbc:postgresql://localhost:5432/product_db
@@ -62,5 +63,6 @@ kafka:
     image-deleted: "image-deleted"
     product-created: "product-created"
     product-deleted: "product-deleted"
+    inventory-updated: "inventory-updated"
 
 

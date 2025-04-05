@@ -1,9 +1,9 @@
 package kz.amihady.eccomerce.product.service.impl;
 
 import kz.amihady.eccomerce.exception.EntityNotFoundException;
-import kz.amihady.eccomerce.kafka.product.ProductKafkaProducer;
-import kz.amihady.eccomerce.kafka.product.event.ProductCreatedEvent;
-import kz.amihady.eccomerce.kafka.product.event.ProductDeletedEvent;
+import kz.amihady.eccomerce.kafka.ProductKafkaProducer;
+import kz.amihady.eccomerce.kafka.product.ProductCreatedEvent;
+import kz.amihady.eccomerce.kafka.product.ProductDeletedEvent;
 import kz.amihady.eccomerce.product.mapper.ProductMapper;
 import kz.amihady.eccomerce.product.repo.ProductRepository;
 import kz.amihady.eccomerce.product.request.CreateRequest;
@@ -68,6 +68,24 @@ public class ProductCommandServiceImpl implements ProductCommandService {
         // отправить событие об удалении продукта
         ProductDeletedEvent event = new ProductDeletedEvent(id);
         productKafkaProducer.sendProductDeletedEvent(event);
+    }
+
+    @Override
+    @CacheEvict(value = "products", key = "#id")
+    @Transactional
+    public void updateProductStock(UUID id, Long inStock) {
+        log.info("Начало обновления количества товара: productId={}, новое количество={}", id, inStock);
+
+        var product = productRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.warn("Попытка обновления количества для несуществующего продукта: productId={}", id);
+                    return new EntityNotFoundException("Продукт не найден");
+                });
+
+        product.setInStock(inStock);
+        productRepository.save(product);
+
+        log.info("Успешное обновление количества товара: productId={}, новое количество={}", id, inStock);
     }
 
     @Override

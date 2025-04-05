@@ -25,6 +25,7 @@ public class Product {
     String name;
     String description;
     BigDecimal price;
+    Long inStock;
 
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)

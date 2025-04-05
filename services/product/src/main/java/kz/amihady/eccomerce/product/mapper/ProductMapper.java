@@ -21,6 +21,7 @@ public class ProductMapper {
                 .name(request.name())
                 .description(request.description())
                 .price(request.price())
+                .inStock(request.quantity())
                 .build();
     }
 
@@ -29,6 +30,7 @@ public class ProductMapper {
                 product.getName(),
                 product.getDescription(),
                 product.getPrice(),
+                product.getInStock(),
                 product.getImages().stream()
                         .map(imageMapper::fromImage)
                         .toList()

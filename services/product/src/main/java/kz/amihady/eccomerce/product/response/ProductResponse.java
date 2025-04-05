@@ -9,6 +9,8 @@ public record ProductResponse(
         String name,
         String description,
         BigDecimal price,
+        Long inStock,
         List<ImageResponse> images
+
 ) {
 }

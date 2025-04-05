@@ -10,5 +10,8 @@ public interface ProductCommandService {
 
     UUID create(CreateRequest request);
     void delete(UUID id);
+
+    void updateProductStock(UUID id, Long inStock);
     ProductUpdateResponse update(UUID id, UpdateRequest request);
+
 }

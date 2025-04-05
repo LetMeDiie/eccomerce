@@ -4,9 +4,9 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import kz.amihady.eccomerce.exception.EntityNotFoundException;
-import kz.amihady.eccomerce.kafka.product.ProductKafkaProducer;
-import kz.amihady.eccomerce.kafka.product.event.ProductCreatedEvent;
-import kz.amihady.eccomerce.kafka.product.event.ProductDeletedEvent;
+import kz.amihady.eccomerce.kafka.ProductKafkaProducer;
+import kz.amihady.eccomerce.kafka.product.ProductCreatedEvent;
+import kz.amihady.eccomerce.kafka.product.ProductDeletedEvent;
 import kz.amihady.eccomerce.product.entity.Product;
 import kz.amihady.eccomerce.product.mapper.ProductMapper;
 import kz.amihady.eccomerce.product.repo.ProductRepository;
@@ -53,13 +53,14 @@ class ProductCommandServiceImplTest {
     void setUp() {
         productId = UUID.randomUUID();
 
-        createRequest = new CreateRequest("Гитара", "Классическая гитара", new BigDecimal("500.00"), 10);
+        createRequest = new CreateRequest("Гитара", "Классическая гитара", new BigDecimal("500.00"), 10L);
 
         product = new Product();
         product.setId(productId);
         product.setName(createRequest.name());
         product.setDescription(createRequest.description());
         product.setPrice(createRequest.price());
+        product.setInStock(createRequest.quantity());
     }
 
     @Test
