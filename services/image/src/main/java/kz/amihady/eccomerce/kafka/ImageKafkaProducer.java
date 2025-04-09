@@ -1,9 +1,9 @@
-package kz.amihady.eccomerce.kafka.image;
+package kz.amihady.eccomerce.kafka;
 
 
 import kz.amihady.eccomerce.kafka.config.KafkaTopicsProperties;
-import kz.amihady.eccomerce.kafka.image.event.ImageAddedEvent;
-import kz.amihady.eccomerce.kafka.image.event.ImageDeletedEvent;
+import kz.amihady.eccomerce.kafka.image.ImageAddedEvent;
+import kz.amihady.eccomerce.kafka.image.ImageDeletedEvent;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -19,7 +19,7 @@ import static org.springframework.kafka.support.KafkaHeaders.TOPIC;
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(level= AccessLevel.PRIVATE,makeFinal = true)
-public class ImageProducer {
+public class ImageKafkaProducer {
 
      KafkaTemplate<String, Object> kafkaTemplate;
      KafkaTopicsProperties kafkaTopicsProperties;

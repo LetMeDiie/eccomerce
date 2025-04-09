@@ -8,9 +8,9 @@ import kz.amihady.eccomerce.image.entity.Image;
 import kz.amihady.eccomerce.image.repo.ImageRepository;
 import kz.amihady.eccomerce.image.service.impl.ImageServiceImpl;
 import kz.amihady.eccomerce.image.validation.FileValidator;
-import kz.amihady.eccomerce.kafka.image.ImageProducer;
-import kz.amihady.eccomerce.kafka.image.event.ImageAddedEvent;
-import kz.amihady.eccomerce.kafka.image.event.ImageDeletedEvent;
+import kz.amihady.eccomerce.kafka.ImageKafkaProducer;
+import kz.amihady.eccomerce.kafka.image.ImageAddedEvent;
+import kz.amihady.eccomerce.kafka.image.ImageDeletedEvent;
 import kz.amihady.eccomerce.minio.service.MinioImageService;
 import kz.amihady.eccomerce.product.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,7 +45,7 @@ public class ImageServiceImplTest {
     private FileValidator fileValidator;
 
     @Mock
-    private ImageProducer imageProducer;
+    private ImageKafkaProducer imageKafkaProducer;
 
     @InjectMocks
     private ImageServiceImpl imageService;
@@ -74,7 +74,7 @@ public class ImageServiceImplTest {
         verify(productService).existsById(productId);
         verify(fileValidator).validate(file);
         verify(imageRepository).save(any(Image.class));
-        verify(imageProducer).sendImageAddedEvent(any(ImageAddedEvent.class));
+        verify(imageKafkaProducer).sendImageAddedEvent(any(ImageAddedEvent.class));
     }
 
     @Test
@@ -84,7 +84,7 @@ public class ImageServiceImplTest {
 
         assertThrows(EntityNotFoundException.class, () -> imageService.addImage(productId, file));
 
-        verifyNoInteractions(fileValidator, minioImageService, imageRepository, imageProducer);
+        verifyNoInteractions(fileValidator, minioImageService, imageRepository, imageKafkaProducer);
     }
 
     @Test
@@ -95,7 +95,7 @@ public class ImageServiceImplTest {
 
         assertThrows(FileValidationException.class, () -> imageService.addImage(productId, file));
         verify(imageRepository, never()).save(any());
-        verify(imageProducer, never()).sendImageAddedEvent(any());
+        verify(imageKafkaProducer, never()).sendImageAddedEvent(any());
     }
 
     @Test
@@ -114,7 +114,7 @@ public class ImageServiceImplTest {
         // then
         assertEquals(Status.DELETED, image.getStatus());
         verify(imageRepository).findById(imageId);
-        verify(imageProducer).sendImageDeletedEvent(new ImageDeletedEvent(imageId));
+        verify(imageKafkaProducer).sendImageDeletedEvent(new ImageDeletedEvent(imageId));
     }
 
     @Test

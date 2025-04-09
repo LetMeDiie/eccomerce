@@ -1,11 +1,11 @@
-package kz.amihady.eccomerce.kafka.product;
+package kz.amihady.eccomerce.kafka;
 
 
 import kz.amihady.eccomerce.exception.EntityNotFoundException;
 import kz.amihady.eccomerce.image.service.ImageService;
 import kz.amihady.eccomerce.kafka.config.KafkaTopicsProperties;
-import kz.amihady.eccomerce.kafka.product.event.ProductCreatedEvent;
-import kz.amihady.eccomerce.kafka.product.event.ProductDeletedEvent;
+import kz.amihady.eccomerce.kafka.product.ProductCreatedEvent;
+import kz.amihady.eccomerce.kafka.product.ProductDeletedEvent;
 import kz.amihady.eccomerce.product.service.ProductService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @FieldDefaults(level= AccessLevel.PRIVATE,makeFinal = true)
 @Slf4j
-public class ProductConsumer {
+public class ImageKafkaConsumer {
     KafkaTopicsProperties kafkaTopicsProperties;
     ProductService productService;
     ImageService imageService;

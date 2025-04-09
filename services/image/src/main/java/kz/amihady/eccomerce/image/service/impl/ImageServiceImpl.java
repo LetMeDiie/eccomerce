@@ -6,9 +6,9 @@ import kz.amihady.eccomerce.image.entity.Image;
 import kz.amihady.eccomerce.image.repo.ImageRepository;
 import kz.amihady.eccomerce.image.service.ImageService;
 import kz.amihady.eccomerce.image.validation.FileValidator;
-import kz.amihady.eccomerce.kafka.image.ImageProducer;
-import kz.amihady.eccomerce.kafka.image.event.ImageAddedEvent;
-import kz.amihady.eccomerce.kafka.image.event.ImageDeletedEvent;
+import kz.amihady.eccomerce.kafka.ImageKafkaProducer;
+import kz.amihady.eccomerce.kafka.image.ImageAddedEvent;
+import kz.amihady.eccomerce.kafka.image.ImageDeletedEvent;
 import kz.amihady.eccomerce.minio.service.MinioImageService;
 import kz.amihady.eccomerce.product.service.ProductService;
 import lombok.AccessLevel;
@@ -30,7 +30,7 @@ public class ImageServiceImpl implements ImageService {
     MinioImageService minioImageService;
     ProductService productService;
     FileValidator fileValidator;
-    ImageProducer imageProducer;
+    ImageKafkaProducer imageKafkaProducer;
 
     @Override
     public UUID addImage(UUID productId, MultipartFile file){
@@ -60,7 +60,7 @@ public class ImageServiceImpl implements ImageService {
 
         log.info("Готовим событие ImageAddedEvent...");
         ImageAddedEvent event = new ImageAddedEvent(image.getId(), productId, imageUrl);
-        imageProducer.sendImageAddedEvent(event);
+        imageKafkaProducer.sendImageAddedEvent(event);
 
         return image.getId();
     }
@@ -76,7 +76,7 @@ public class ImageServiceImpl implements ImageService {
 
         log.info("Готовим событие ImageDeletedEvent...");
         ImageDeletedEvent event = new ImageDeletedEvent(id);
-        imageProducer.sendImageDeletedEvent(event);
+        imageKafkaProducer.sendImageDeletedEvent(event);
     }
 
     @Override

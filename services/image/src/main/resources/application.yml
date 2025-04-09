@@ -11,7 +11,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: validate
-    show-sql: true
+    show-sql: false
     open-in-view: false
   flyway:
     enabled: true
@@ -19,7 +19,6 @@ spring:
 
   kafka:
     bootstrap-servers: localhost:9092
-
     consumer:
       group-id: productId
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer

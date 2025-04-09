@@ -1,4 +1,4 @@
-package kz.amihady.eccomerce.kafka.image.event;
+package kz.amihady.eccomerce.kafka.image;
 
 import java.util.UUID;
 
