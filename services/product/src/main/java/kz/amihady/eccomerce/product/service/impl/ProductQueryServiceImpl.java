@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -57,6 +58,11 @@ public class ProductQueryServiceImpl implements ProductQueryService {
         return productPage.getContent().stream()
                 .map(productMapper::fromProduct)
                 .toList();
+    }
+
+    @Override
+    public BigDecimal getProductPrice(UUID id) {
+        return findById(id).getPrice();
     }
 
     @Override

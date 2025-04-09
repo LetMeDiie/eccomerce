@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @RestController
@@ -25,6 +26,11 @@ public class ProductRestController {
     @GetMapping
     public ResponseEntity<ProductResponse> getProduct(@PathVariable UUID productId) {
         return ResponseEntity.ok(queryService.findProduct(productId));
+    }
+
+    @GetMapping("/price")
+    public ResponseEntity<BigDecimal> getProductPrice(@PathVariable UUID productId){
+        return ResponseEntity.ok(queryService.getProductPrice(productId));
     }
 
     @PutMapping
