@@ -4,10 +4,10 @@ import jakarta.annotation.PostConstruct;
 import kz.amihady.eccomerce.exception.BusinessException;
 import kz.amihady.eccomerce.inventory.entity.Inventory;
 import kz.amihady.eccomerce.inventory.repo.InventoryRepository;
-import kz.amihady.eccomerce.kafka.InventoryKafkaProducer;
-import kz.amihady.eccomerce.kafka.event.InventoryUpdatedEvent;
+import kz.amihady.eccomerce.kafka.producer.InventoryKafkaProducer;
+import kz.amihady.eccomerce.kafka.producer.event.InventoryUpdatedEvent;
 import kz.amihady.eccomerce.order.request.OrderInventoryRequest;
-import kz.amihady.eccomerce.order.service.OrderInventoryService;
+import kz.amihady.eccomerce.inventory.service.PurchaseInventoryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class OrderInventoryServiceTest {
+public class PurchaseInventoryServiceTest {
 
     @Mock
     private  InventoryRepository inventoryRepository;
@@ -30,7 +30,7 @@ public class OrderInventoryServiceTest {
     private  InventoryKafkaProducer inventoryKafkaProducer;
 
     @InjectMocks
-    private OrderInventoryService orderInventoryService;
+    private PurchaseInventoryService purchaseInventoryService;
 
     private UUID productId;
 
@@ -50,7 +50,7 @@ public class OrderInventoryServiceTest {
         when(inventoryRepository.findByProductId(productId))
                 .thenReturn(Optional.of(inventory));
 
-        orderInventoryService.purchase(request);
+        purchaseInventoryService.purchase(request);
 
         assertEquals(6L , inventory.getInStock());
         assertEquals(7L, inventory.getReserved());
@@ -70,7 +70,7 @@ public class OrderInventoryServiceTest {
         when(inventoryRepository.findByProductId(productId))
                 .thenReturn(Optional.of(inventory));
 
-        BusinessException exception = assertThrows(BusinessException.class, () -> orderInventoryService.purchase(request));
+        BusinessException exception = assertThrows(BusinessException.class, () -> purchaseInventoryService.purchase(request));
 
         assertEquals(message,exception.getMessage());
         verify(inventoryRepository,never()).save(any());
@@ -81,13 +81,12 @@ public class OrderInventoryServiceTest {
     public void cancelPurchase_Success(){
         var inventory =
                 new Inventory(1L,productId,10L,4L);
-        var request =
-                new OrderInventoryRequest(productId,2L);
+        Long quantity =2L;
 
         when(inventoryRepository.findByProductId(productId))
                 .thenReturn(Optional.of(inventory));
 
-        orderInventoryService.cancelPurchase(request);
+        purchaseInventoryService.cancelPurchase(productId,quantity);
 
         assertEquals(12L,inventory.getInStock());
         assertEquals(2L,inventory.getReserved());
@@ -99,18 +98,17 @@ public class OrderInventoryServiceTest {
     public void cancelPurchase_WhenReservedLessThanQuantity_ThrowBusinessException(){
         var inventory =
                 new Inventory(1L,productId,5L,5L);
-        var request =
-                new OrderInventoryRequest(productId,7L);
+        Long quantity = 7L;
 
         String message = String.format(
                 "Невозможно вернуть товар обратно. Доступно в резерве: %d, Возвращаемое количество: %d",
-                inventory.getReserved(), request.quantity()
+                inventory.getReserved(), quantity
         );
 
         when(inventoryRepository.findByProductId(productId))
                 .thenReturn(Optional.of(inventory));
 
-        BusinessException exception = assertThrows(BusinessException.class, () -> orderInventoryService.cancelPurchase(request));
+        BusinessException exception = assertThrows(BusinessException.class, () -> purchaseInventoryService.cancelPurchase(productId,quantity));
 
         assertEquals(message,exception.getMessage());
         verify(inventoryRepository,never()).save(any());
@@ -125,7 +123,7 @@ public class OrderInventoryServiceTest {
         when(inventoryRepository.findByProductId(productId))
                 .thenReturn(Optional.of(inventory));
 
-        orderInventoryService.confirmPurchase(productId,4L);
+        purchaseInventoryService.confirmPurchase(productId,4L);
 
         assertEquals(5L,inventory.getInStock());
         assertEquals(1L,inventory.getReserved());
@@ -146,7 +144,7 @@ public class OrderInventoryServiceTest {
         when(inventoryRepository.findByProductId(productId))
                 .thenReturn(Optional.of(inventory));
 
-        BusinessException exception = assertThrows(BusinessException.class, () -> orderInventoryService.confirmPurchase(productId,quantity));
+        BusinessException exception = assertThrows(BusinessException.class, () -> purchaseInventoryService.confirmPurchase(productId,quantity));
 
         assertEquals(message,exception.getMessage());
         assertEquals(5L,inventory.getInStock());

@@ -14,4 +14,7 @@ public class KafkaTopicsProperties {
     private String productDeleted;
     private String inventoryUpdated;
     private String orderPaid;
+    private String orderCanceled;
+    private String orderReserveRequest;
+    private String orderReserveResponse;
 }

@@ -25,17 +25,20 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.type.mapping: >
-          productCreatedEvent:kz.amihady.eccomerce.kafka.event.ProductCreatedEvent,
-          productDeletedEvent:kz.amihady.eccomerce.kafka.event.ProductDeletedEvent,
-          orderPaid:kz.amihady.eccomerce.kafka.event.OrderPaidEvent
-        spring.json.trusted.packages: kz.amihady.eccomerce.kafka.event
+          productCreatedEvent:kz.amihady.eccomerce.kafka.consumer.event.ProductCreatedEvent,
+          productDeletedEvent:kz.amihady.eccomerce.kafka.consumer.event.ProductDeletedEvent,
+          orderCanceledEvent:kz.amihady.eccomerce.kafka.consumer.event.OrderCanceledEvent,
+          orderReserveRequestEvent:kz.amihady.eccomerce.kafka.consumer.event.OrderReserveRequestEvent
+        spring.json.trusted.packages: kz.amihady.eccomerce.kafka.consumer.event.*
 
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
         spring.json.type.mapping: >
-          inventoryUpdatedEvent:kz.amihady.eccomerce.kafka.event.InventoryUpdatedEvent
+          inventoryUpdatedEvent:kz.amihady.eccomerce.kafka.producer.event.InventoryUpdatedEvent,
+          orderReserveResponseEvent:kz.amihady.eccomerce.kafka.producer.event.OrderReserveResponseEvent
+        spring.json.trusted.packages: kz.amihady.eccomerce.kafka.producer.event.*
 
 
 logging:
@@ -51,4 +54,7 @@ kafka:
     product-created: "product-created"
     product-deleted: "product-deleted"
     inventory-updated: "inventory-updated"
+    order-canceled: "order-canceled"
     order-paid: "order-paid"
+    order-reserve-request: "order-reserve-request"
+    order-reserve-response: "order-reserve-response"

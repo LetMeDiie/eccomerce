@@ -5,8 +5,8 @@ import kz.amihady.eccomerce.exception.EntityNotFoundException;
 import kz.amihady.eccomerce.inventory.entity.Inventory;
 import kz.amihady.eccomerce.inventory.repo.InventoryRepository;
 import kz.amihady.eccomerce.inventory.request.InventoryUpdateRequest;
-import kz.amihady.eccomerce.kafka.InventoryKafkaProducer;
-import kz.amihady.eccomerce.kafka.event.InventoryUpdatedEvent;
+import kz.amihady.eccomerce.kafka.producer.InventoryKafkaProducer;
+import kz.amihady.eccomerce.kafka.producer.event.InventoryUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,6 +20,7 @@ import java.util.UUID;
 public class InventoryService {
     private final InventoryRepository repository;
     private final InventoryKafkaProducer kafkaProducer;
+
     @Transactional
     public Long updateProductQuantity(UUID productId, InventoryUpdateRequest request) {
         log.info("Попытка обновить количество товара для продукта с ID: {}", productId);
@@ -86,7 +87,7 @@ public class InventoryService {
         log.info("Инвентарь для продукта с ID: {} успешно удален.", productId);
     }
 
-    private Inventory findByProductId(UUID productId){
+    public Inventory findByProductId(UUID productId){
         return repository.findByProductId(productId)
                 .orElseThrow(() -> {
                     String message = String.format("Инвентарь для продукта с ID %s не найден.", productId);
