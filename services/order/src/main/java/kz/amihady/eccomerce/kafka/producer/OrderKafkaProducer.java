@@ -2,6 +2,7 @@ package kz.amihady.eccomerce.kafka.producer;
 
 import kz.amihady.eccomerce.kafka.config.KafkaTopicsProperties;
 import kz.amihady.eccomerce.kafka.producer.event.OrderCanceledEvent;
+import kz.amihady.eccomerce.kafka.producer.event.OrderNotificationEvent;
 import kz.amihady.eccomerce.kafka.producer.event.OrderReserveRequestEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,10 @@ public class OrderKafkaProducer {
 
     public void sendOrderReserveRequestEvent(OrderReserveRequestEvent event) {
         sendEvent(event, kafkaTopicsProperties.getOrderReserveRequest());
+    }
+
+    public void sendOrderNotificationEvent(OrderNotificationEvent event){
+        sendEvent(event,kafkaTopicsProperties.getOrderNotification());
     }
 
     public void sendEvent(Object event, String topic) {

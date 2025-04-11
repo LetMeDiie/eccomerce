@@ -7,7 +7,7 @@ import kz.amihady.eccomerce.exception.BusinessException;
 import kz.amihady.eccomerce.exception.EntityNotFoundException;
 import kz.amihady.eccomerce.kafka.producer.OrderKafkaProducer;
 import kz.amihady.eccomerce.kafka.producer.event.OrderCanceledEvent;
-import kz.amihady.eccomerce.order.OrderCommandService;
+import kz.amihady.eccomerce.order.service.OrderCommandService;
 import kz.amihady.eccomerce.order.OrderStatus;
 import kz.amihady.eccomerce.order.entity.Order;
 import kz.amihady.eccomerce.order.mapper.OrderMapper;

@@ -55,17 +55,6 @@ public class InventoryService {
     }
 
 
-    public Long getProductQuantity(UUID productId) {
-        log.info("Попытка получить информацию о доступном количестве товара для продукта с ID: {}", productId);
-
-        var inventory = findByProductId(productId);
-
-        log.info("Информация о товаре с ID {} получена успешно. Текущее количество на складе: {} (из которых зарезервировано: {})",
-                productId, inventory.getInStock(), inventory.getReserved());
-
-        return inventory.getInStock();
-    }
-
     public Long createProductInventory(UUID productId, Long quantity)  {
         log.info("Создание инвентаря для продукта с ID: {}", productId);
 

@@ -1,0 +1,30 @@
+
+
+server:
+  port: 8040
+spring:
+  data:
+    mongodb:
+      username: amihady
+      password: amihady
+      host: localhost
+      port: 27017
+      database: notification
+      authentication-database: admin
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: notification
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.type.mapping: >
+          orderNotificationEvent:kz.amihady.eccomerce.kafka.event.OrderNotificationEvent
+        spring.json.trusted.packages: kz.amihady.eccomerce.kafka.event
+
+
+
+kafka:
+  topics:
+    order-notification: "order-notification"

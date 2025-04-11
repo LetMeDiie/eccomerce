@@ -1,9 +1,9 @@
 package kz.amihady.eccomerce.product.service.impl;
 
 import kz.amihady.eccomerce.exception.EntityNotFoundException;
-import kz.amihady.eccomerce.kafka.ProductKafkaProducer;
-import kz.amihady.eccomerce.kafka.product.ProductCreatedEvent;
-import kz.amihady.eccomerce.kafka.product.ProductDeletedEvent;
+import kz.amihady.eccomerce.kafka.producer.ProductKafkaProducer;
+import kz.amihady.eccomerce.kafka.producer.event.ProductCreatedEvent;
+import kz.amihady.eccomerce.kafka.producer.event.ProductDeletedEvent;
 import kz.amihady.eccomerce.product.mapper.ProductMapper;
 import kz.amihady.eccomerce.product.repo.ProductRepository;
 import kz.amihady.eccomerce.product.request.CreateRequest;

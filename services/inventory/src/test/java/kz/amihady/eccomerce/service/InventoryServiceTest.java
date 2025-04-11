@@ -101,31 +101,6 @@ public class InventoryServiceTest {
     }
 
     @Test
-    public void getProductQuantity_Success() {
-        var inventory =
-                new Inventory(1L, productId, 10L, 5L);
-
-        when(repository.findByProductId(productId))
-                .thenReturn(Optional.of(inventory));
-
-        Long result = inventoryService.getProductQuantity(productId);
-
-        assertEquals(10L, result);
-    }
-
-    @Test
-    public void getProductQuantity_ShouldThrowEntityNotFoundException_WhenInventoryNotFound() {
-        when(repository.findByProductId(productId))
-                .thenThrow(new EntityNotFoundException("Не найдено"));
-
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () ->
-                inventoryService.getProductQuantity(productId)
-        );
-
-        assertEquals("Не найдено", exception.getMessage());
-    }
-
-    @Test
     public void deleteProductInventory_Success() {
         var inventory =
                 new Inventory(1L, productId, 10L, 5L);

@@ -3,12 +3,9 @@ package kz.amihady.eccomerce.kafka.consumer;
 
 import kz.amihady.eccomerce.inventory.service.InventoryService;
 import kz.amihady.eccomerce.kafka.config.KafkaTopicsProperties;
+import kz.amihady.eccomerce.kafka.consumer.event.*;
 import kz.amihady.eccomerce.kafka.producer.InventoryKafkaProducer;
 import kz.amihady.eccomerce.kafka.producer.event.OrderReserveResponseEvent;
-import kz.amihady.eccomerce.kafka.consumer.event.OrderCanceledEvent;
-import kz.amihady.eccomerce.kafka.consumer.event.OrderReserveRequestEvent;
-import kz.amihady.eccomerce.kafka.consumer.event.ProductCreatedEvent;
-import kz.amihady.eccomerce.kafka.consumer.event.ProductDeletedEvent;
 import kz.amihady.eccomerce.inventory.service.PurchaseInventoryService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -83,5 +80,18 @@ public class InventoryKafkaConsumer {
 
         var orderReserveResponseEvent = new OrderReserveResponseEvent(event.orderId(), status, message);
         inventoryKafkaProducer.sendOrderReserveResponseEvent(orderReserveResponseEvent);
+    }
+
+    @KafkaListener(topics = "#{kafkaTopicsProperties.paymentInventory}")
+    public void consumePaymentInventoryEvent (PaymentInventoryEvent event) {
+        log.info("Получено событие PaymentInventoryEvent. Продукт UUID: {}, Количество: {}", event.productId(), event.quantity());
+        try {
+            var inventory = inventoryService.findByProductId(event.productId());
+            purchaseInventoryService.confirmPurchase(inventory,event.quantity());
+            log.info("Событие PaymentInventoryeEvent успешно обработано и завершено.");
+        } catch (Exception exception) {
+            log.error("Ошибка. Продукт UUID: {}, Количество: {}. Ошибка: {}",
+                    event.productId(), event.quantity(), exception.getMessage(), exception);
+        }
     }
 }

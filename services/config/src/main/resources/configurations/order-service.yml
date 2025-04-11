@@ -1,0 +1,69 @@
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/order_db
+    username: amihady
+    password: amihady
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: orderId
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.type.mapping: >
+          orderPaidEvent:kz.amihady.eccomerce.kafka.consumer.event.OrderPaidEvent,
+          orderReserveResponseEvent:kz.amihady.eccomerce.kafka.consumer.event.OrderReserveResponseEvent,
+          paymentOrderEvent:kz.amihady.eccomerce.kafka.consumer.event.PaymentOrderEvent
+        spring.json.trusted.packages: kz.amihady.eccomerce.kafka.consumer.event
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: >
+          orderCanceledEvent:kz.amihady.eccomerce.kafka.producer.event.OrderCanceledEvent,
+          orderReserveRequestEvent:kz.amihady.eccomerce.kafka.producer.event.OrderReserveRequestEvent,
+          orderNotificationEvent:kz.amihady.eccomerce.kafka.producer.event.OrderNotificationEvent
+
+
+
+
+logging:
+  level:
+    org.apache.kafka: ERROR
+    org.springframework.kafka: ERROR
+
+
+application:
+  config:
+    product-url: http://localhost:8222/api/products
+    customer-url: http://localhost:8222/api/customers
+    inventory-url: http://localhost:8222/api/inventory
+
+
+kafka:
+  topics:
+    order-canceled: "order-canceled"
+    order-reserve-request: "order-reserve-request"
+    order-reserve-response: "order-reserve-response"
+    payment-order: "payment-order"
+    order-notification: "order-notification"
+
+server:
+  port: 8084
+
+
+
+

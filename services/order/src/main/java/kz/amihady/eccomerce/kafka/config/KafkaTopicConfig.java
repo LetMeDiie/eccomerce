@@ -18,4 +18,11 @@ public class KafkaTopicConfig {
                 .name(kafkaTopicsProperties.getOrderCanceled())
                 .build();
     }
+
+    @Bean
+    public NewTopic orderNotification(){
+        return TopicBuilder
+                .name(kafkaTopicsProperties.getOrderNotification())
+                .build();
+    }
 }

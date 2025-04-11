@@ -1,0 +1,33 @@
+spring:
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: >
+          paymentInventoryEvent:kz.amihady.eccomerce.kafka.event.PaymentInventoryEvent,
+          paymentOrderEvent:kz.amihady.eccomerce.kafka.event.PaymentOrderEvent
+
+
+
+logging:
+  level:
+    org.apache.kafka: ERROR
+    org.springframework.kafka: ERROR
+
+
+application:
+  config:
+    order-url: http://localhost:8222/api/orders
+
+
+kafka:
+  topics:
+    payment-inventory: "payment-inventory"
+    payment-order: "payment-order"
+
+
+
+server:
+  port: 8085

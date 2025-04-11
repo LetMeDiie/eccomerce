@@ -3,8 +3,8 @@ package kz.amihady.eccomerce.order.controller;
 import jakarta.validation.Valid;
 import kz.amihady.eccomerce.order.request.OrderRequest;
 import kz.amihady.eccomerce.order.response.OrderResponse;
-import kz.amihady.eccomerce.order.OrderCommandService;
-import kz.amihady.eccomerce.order.OrderQueryService;
+import kz.amihady.eccomerce.order.service.OrderCommandService;
+import kz.amihady.eccomerce.order.service.OrderQueryService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -29,10 +29,10 @@ public class OrderRestController {
                 .ok(orderQueryService.findAll(customerId));
     }
 
-    @GetMapping("/order/{orderId}")
+    @GetMapping("/{orderId}/{customerId}")
     public ResponseEntity<OrderResponse> findById(
             @PathVariable("orderId") UUID orderId,
-            @RequestParam("customerId") UUID customerId) {  // Предполагаем, что customerId передается как query-параметр
+            @PathVariable("customerId") UUID customerId) {  // Через токен должен был передаваться , security попозже добавлю
 
         return ResponseEntity.ok(orderQueryService.findById(orderId, customerId));
     }
@@ -45,7 +45,7 @@ public class OrderRestController {
                 .ok(orderCommandService.createOrder(request));
     }
 
-    @PostMapping("/{orderId}")
+    @DeleteMapping("/{orderId}")
     public ResponseEntity<String> cancelOrder(
             @PathVariable("orderId") UUID orderId){
         orderCommandService.cancelOrder(orderId);
